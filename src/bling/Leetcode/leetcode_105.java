@@ -15,36 +15,34 @@ public class leetcode_105 {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         TreeNode root = null;
         int n = preorder.length;
-        helper(preorder,inorder,0,n,0,n,root);
+        root = helper(preorder,inorder,0,n,0,n);
         return root;
     }
 
-    void helper(int[] preorder, int[] inorder,int preBegin, int preEnd, int inBegin, int inEnd, TreeNode root){
+    TreeNode helper(int[] preorder, int[] inorder,int preBegin, int preEnd, int inBegin, int inEnd){
 
+        //edge case
         if(preBegin>=preEnd)
-            return;
+            return null;
 
         int rootVal = preorder[preBegin];
-
-        int inorderRootIndex = Arrays.asList(inorder).indexOf(rootVal);
-        int leftTreeSize = inorderRootIndex - inBegin;
-        int rightTreeSize = inEnd - inorderRootIndex-1;
+        int index = inBegin;
+        for(int i = inBegin; i < inEnd; i++){
+            if(inorder[i] == rootVal){
+                index = i;
+                break;
+            }
+        }
 
         // create root node
-        root = new TreeNode(rootVal);
+        TreeNode root = new TreeNode(rootVal);
 
         // create left sub-tree
-        int leftTreePreBegin = preBegin+1;
-        int leftTreePreEnd = leftTreePreBegin+leftTreeSize;
-        int leftTreeInBegin = inBegin;
-        int leftTreeInEnd = inorderRootIndex;
-        helper(preorder,inorder,leftTreePreBegin,leftTreePreEnd,leftTreeInBegin,leftTreeInEnd,root.left);
+        root.left = helper(preorder,inorder, preBegin+1, preBegin+(index-inBegin)+1, inBegin, index);
 
         // create right sub-tree
-        int rightTreePreBegin = leftTreePreEnd;
-        int rightTreePreEnd = preEnd;
-        int rightTreeInBegin = inorderRootIndex + 1;
-        int rightTreeInEnd = inEnd;
-        helper(preorder,inorder,rightTreePreBegin,rightTreePreEnd,rightTreeInBegin,rightTreeInEnd,root.right);
+        root.right = helper(preorder,inorder, preBegin+index-inBegin+1, preBegin-inBegin+inEnd, index+1,inEnd);
+
+        return root;
     }
 }
