@@ -4,11 +4,8 @@ import java.util.*;
 
 public class test {
     public static void main(String[] args) {
-        String s = "3";
-        assign(s);
-        util.println(s);
-    }
-    static void assign(String s){
-        s = "123";
+        StringBuffer s1 = new StringBuffer("123");
+        StringBuffer s2 = new StringBuffer("123");
+        util.println(s1.equals(s2));
     }
 }
